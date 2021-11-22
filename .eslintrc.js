@@ -7,8 +7,9 @@ module.exports = {
     node: true,
   },
   extends: ["airbnb-base", "airbnb-typescript/base", "prettier"],
-  parser: "@typescript-eslint/parser",
+  parser: ["@typescript-eslint/parser", "@babel/eslint-parser"],
   parserOptions: {
+    sourceType: "module",
     project: "./tsconfig.json",
     ecmaVersion: 13,
   },
