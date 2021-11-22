@@ -8,6 +8,11 @@
     "start": "node dist/index",
     "test": "jest --watchAll --collect-coverage"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "dist"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SkylabCoders/Joan_Back-Final-Project-202109.git"
@@ -20,6 +25,8 @@
   },
   "homepage": "https://github.com/SkylabCoders/Joan_Back-Final-Project-202109#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
