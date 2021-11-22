@@ -1,21 +1,15 @@
-import express, { Application, Request, Response } from "express";
+require("dotenv").config();
+const initializeMongo = require("./database/index");
 
-const app: Application = express();
-const port = process.env.PORT ?? 3000;
+const { initializeServer } = require("./server/index");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const port = process.env.PORT ?? process.env.SERVER_PORT ?? 5000;
 
-app.get("/test", async (req: Request, res: Response): Promise<Response> => {
-  return res.status(200).send({
-    message: "It worksss!",
-  });
-});
-
-try {
-  app.listen(port, (): void => {
-    console.log(`Connected successfully on port ${port}`);
-  });
-} catch (error) {
-  console.error(`Error occured:`);
-}
+(async () => {
+  try {
+    await initializeMongo(process.env.MONGODB_STRING);
+    await initializeServer(port);
+  } catch (error) {
+    process.exit(1);
+  }
+})();
