@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/test", async (req: Request, res: Response): Promise<Response> => {
   return res.status(200).send({
-    message: "It works!",
+    message: "It worksss!",
   });
 });
 
