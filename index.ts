@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const initializeMongo = require("./database/index");
+const { initializeMongo } = require("./database/index");
 
 const { initializeServer } = require("./server/index");
 
