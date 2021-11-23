@@ -1,11 +1,11 @@
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import User from "../../database/models/user";
-
-const bcrypt = require("bcrypt");
 
 class ErrorCode extends Error {
   code: number | undefined;
 }
-const createUser = async (req, res, next) => {
+export const createUser = async (req, res, next) => {
   const { name, username, password, email, avatar } = req.body;
   try {
     const user = await User.create({
@@ -23,4 +23,31 @@ const createUser = async (req, res, next) => {
   }
 };
 
-export default createUser;
+export const loginUser = async (req, res, next) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+  if (!user) {
+    const error = new ErrorCode("Wrong credentials");
+    error.code = 401;
+    next(error);
+  } else {
+    const rightPassword = await bcrypt.compare(password, user.password);
+    if (!rightPassword) {
+      const error = new ErrorCode("Wrong credentials");
+      error.code = 401;
+      next(error);
+    } else {
+      const token = jwt.sign(
+        {
+          name: user.name,
+          username: user.username,
+          id: user.id,
+          email: user.email,
+          avatar: user.avatar,
+        },
+        process.env.SECRET_HASH
+      );
+      res.json({ token });
+    }
+  }
+};

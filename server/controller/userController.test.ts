@@ -1,4 +1,4 @@
-import createUser from "./userController";
+import { createUser } from "./userController";
 
 const bcrypt = require("bcrypt");
 const User = require("../../database/models/user");
