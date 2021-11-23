@@ -1,9 +1,15 @@
 import chalk from "chalk";
+
 import cors from "cors";
+
 import express from "express";
+
 import morgan from "morgan";
-import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
+
 import Debug from "debug";
+
+import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
+
 const debug = Debug("escroom:server");
 
 const userRoutes = require("./routes/userRoutes");

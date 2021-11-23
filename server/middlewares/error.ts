@@ -1,6 +1,7 @@
+import Debug from "debug";
+
 const { ValidationError } = require("express-validation");
 
-import Debug from "debug";
 const debug = Debug("escroom:errors");
 
 export const notFoundErrorHandler = (req, res) => {
