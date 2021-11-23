@@ -1,11 +1,16 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import express from "express";
 import User from "../../database/models/user";
 
 class ErrorCode extends Error {
   code: number | undefined;
 }
-export const createUser = async (req, res, next) => {
+export const createUser = async (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
   const { name, username, password, email, avatar } = req.body;
   try {
     const user = await User.create({
@@ -23,7 +28,11 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-export const loginUser = async (req, res, next) => {
+export const loginUser = async (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
   if (!user) {
