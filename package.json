@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start-dev": "ts-node-dev ./index.ts",
-    "start": "node dist/index.js",
+    "start": "tsc && node dist/index.js",
     "test": "jest --watchAll --collect-coverage",
     "prepare": "husky install"
   },
