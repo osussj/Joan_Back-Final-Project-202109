@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const User = require("../../database/models/user");
 
 jest.mock("../../database/models/user", () => ({
-  create: jest.fn(),
+  creata: jest.fn(),
 }));
 
 describe("Given a createUser function", () => {
