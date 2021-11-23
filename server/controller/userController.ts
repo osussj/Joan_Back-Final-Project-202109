@@ -61,7 +61,7 @@ export const loginUser = async (
   }
 };
 
-export const getUser = async (req, res: express.Response, next) => {
+export const getUser = (req, res: express.Response, next) => {
   const user = req.userInfo;
   try {
     res.json(user);
