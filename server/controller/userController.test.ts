@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request } from "express";
 import User from "../../database/models/user";
-import { mockResponse } from "../../utils/mocks/mockFunction";
+import { mockRequest, mockResponse } from "../../utils/mocks/mockFunction";
 import { createUser, getUser, loginUser, updateUser } from "./userController";
 
 jest.mock("../../database/models/user", () => ({
@@ -153,14 +153,7 @@ describe("Given a getUser function", () => {
   });
   describe("When it receives an invalid user", () => {
     test("Then it should invoke next function with error(code 401) ", () => {
-      const req = {
-        userInfo: {
-          username: "admin",
-          email: "admin@admin.com",
-          id: "12",
-          avatar: "admin.jpg",
-        },
-      };
+      const req = mockRequest();
       const next = jest.fn();
 
       getUser(req, null, next);
@@ -186,7 +179,6 @@ describe("Given updateUser", () => {
   describe("When the user is found and edited without error", () => {
     test("Then it should call the method json with the user info updated", async () => {
       const res = mockResponse();
-
       User.findByIdAndUpdate = jest.fn().mockResolvedValue(user);
       await updateUser(req, res, null);
 

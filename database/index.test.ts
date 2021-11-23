@@ -25,7 +25,7 @@ describe("Given initializeMongo", () => {
         }
       );
 
-      await initializeMongo();
+      await initializeMongo("a");
 
       expect(resolve).toHaveBeenCalled();
     });
@@ -40,7 +40,7 @@ describe("Given initializeMongo", () => {
         }
       );
 
-      await initializeMongo();
+      await initializeMongo("a");
 
       expect(reject).toHaveBeenCalled();
     });
