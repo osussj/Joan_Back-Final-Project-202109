@@ -9,10 +9,11 @@ module.exports = {
   extends: ["airbnb-base", "airbnb-typescript/base", "prettier"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
+    sourceType: "module",
     project: "./tsconfig.json",
     ecmaVersion: 13,
   },
-
+  ignorePatterns: ["/*.config.js"],
   plugins: ["@typescript-eslint"],
   rules: {
     "no-param-reassign": "off",
