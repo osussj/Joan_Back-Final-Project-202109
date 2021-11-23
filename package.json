@@ -6,7 +6,8 @@
   "scripts": {
     "start-dev": "ts-node-dev ./index.ts",
     "start-lo": "tsc && node dist/index.js",
-    "test": "jest --watchAll --collect-coverage",
+    "test": "jest",
+    "test-cov":"jest --watchAll collect-coverage",
     "prepare": "husky install",
     "start": "node dist/index.js",
     "build": "tsc",
