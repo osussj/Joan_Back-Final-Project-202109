@@ -1,6 +1,7 @@
-const chalk = require("chalk");
+import chalk from "chalk";
+import mongoose from "mongoose";
+
 const debug = require("debug")("escroom:database");
-const mongoose = require("mongoose");
 
 const initializeMongo = (connectionString) =>
   new Promise<void>((resolve, reject) => {
@@ -26,4 +27,4 @@ const initializeMongo = (connectionString) =>
     });
   });
 
-export = { initializeMongo };
+export default initializeMongo;
