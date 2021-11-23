@@ -5,9 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "start-dev": "ts-node-dev ./index.ts",
-    "start": "tsc && node dist/index.js",
+    "start-lo": "tsc && node dist/index.js",
     "test": "jest --watchAll --collect-coverage",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node build/index.js",
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "jest": {
     "testPathIgnorePatterns": [
