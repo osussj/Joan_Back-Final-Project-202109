@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 import { Request } from "express";
 import User from "../../database/models/user";
 import { mockResponse } from "../../utils/mocks/mockFunction";
-import { createUser, getUser, loginUser } from "./userController";
+import { createUser, getUser, loginUser, updateUser } from "./userController";
 
 jest.mock("../../database/models/user", () => ({
-  creata: jest.fn(),
+  create: jest.fn(),
   findOne: jest.fn(),
 }));
 jest.mock("jsonwebtoken");
@@ -164,6 +164,55 @@ describe("Given a getUser function", () => {
       const next = jest.fn();
 
       getUser(req, null, next);
+      expect(next).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given updateUser", () => {
+  let user;
+  let req;
+  beforeEach(() => {
+    user = {
+      name: "test",
+      username: "test",
+      id: "1234",
+    };
+    req = {
+      userInfo: user,
+      body: user,
+    };
+  });
+  describe("When the user is found and edited without error", () => {
+    test("Then it should call the method json with the user info updated", async () => {
+      const res = mockResponse();
+
+      User.findByIdAndUpdate = jest.fn().mockResolvedValue(user);
+      await updateUser(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(user);
+    });
+  });
+  describe("When the user is not found", () => {
+    test("Then it should call next with the error", async () => {
+      const error = new Error("User not found");
+      const errorcode = 404;
+
+      const next = jest.fn().mockResolvedValue(error);
+      User.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
+      await updateUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", errorcode);
+    });
+  });
+  describe("When the user is found but the promise is rejected", () => {
+    test("Then it should call next with the error", async () => {
+      const next = jest.fn();
+
+      User.findByIdAndUpdate = jest.fn().mockRejectedValue(user);
+      await updateUser(req, null, next);
+
       expect(next).toHaveBeenCalled();
     });
   });
