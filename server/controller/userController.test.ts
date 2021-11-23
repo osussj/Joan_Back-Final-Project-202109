@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { Request } from "express";
 import User from "../../database/models/user";
 import { mockResponse } from "../../utils/mocks/mockFunction";
-import { createUser, loginUser } from "./userController";
+import { createUser, getUser, loginUser } from "./userController";
 
 jest.mock("../../database/models/user", () => ({
   creata: jest.fn(),
@@ -129,6 +129,42 @@ describe("Given a loginUser function", () => {
       await loginUser(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(expectedResponse);
+    });
+  });
+});
+
+describe("Given a getUser function", () => {
+  describe("When it receives a correct user", () => {
+    test("Then it should invoke res.json with an object with the user info", () => {
+      const req = {
+        userInfo: {
+          username: "admin",
+          email: "admin@admin.com",
+          id: "12",
+          avatar: "admin.jpg",
+        },
+      };
+      const user = req.userInfo;
+      const res = mockResponse();
+
+      getUser(req, res, null);
+      expect(res.json).toHaveBeenCalledWith(user);
+    });
+  });
+  describe("When it receives an invalid user", () => {
+    test("Then it should invoke next function with error(code 401) ", () => {
+      const req = {
+        userInfo: {
+          username: "admin",
+          email: "admin@admin.com",
+          id: "12",
+          avatar: "admin.jpg",
+        },
+      };
+      const next = jest.fn();
+
+      getUser(req, null, next);
+      expect(next).toHaveBeenCalled();
     });
   });
 });
