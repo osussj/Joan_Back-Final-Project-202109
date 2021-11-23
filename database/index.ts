@@ -26,4 +26,4 @@ const initializeMongo = (connectionString) =>
     });
   });
 
-export = initializeMongo;
+export = { initializeMongo };
