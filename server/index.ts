@@ -10,9 +10,9 @@ import Debug from "debug";
 
 import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
 
-const debug = Debug("escroom:server");
+import userRoutes from "./routes/userRoutes";
 
-const userRoutes = require("./routes/userRoutes");
+const debug = Debug("escroom:server");
 
 const app = express();
 app.disable("x-powered-by");

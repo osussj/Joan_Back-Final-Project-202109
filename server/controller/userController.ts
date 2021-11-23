@@ -23,4 +23,4 @@ const createUser = async (req, res, next) => {
   }
 };
 
-export = createUser;
+export default createUser;
