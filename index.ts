@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
 dotenv.config();
-import initializeServer from "./server/index";
+import { initializeServer } from "./server/index";
 
 import initializeMongo from "./database/index";
 
