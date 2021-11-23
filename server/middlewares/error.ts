@@ -1,6 +1,7 @@
 const { ValidationError } = require("express-validation");
 
-const debug = require("debug")("escroom:errors");
+import Debug from "debug";
+const debug = Debug("escroom:errors");
 
 export const notFoundErrorHandler = (req, res) => {
   res.status(404).json({ error: "Endpoint not found" });

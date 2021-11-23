@@ -1,8 +1,7 @@
-require("dotenv").config();
-
-const { initializeMongo } = require("./database/index");
-
-const { initializeServer } = require("./server/index");
+import dotenv from "dotenv";
+dotenv.config();
+import initializeServer from "./server/index";
+import initializeMongo from "./database/index";
 
 const port = process.env.PORT ?? process.env.SERVER_PORT ?? 5000;
 
