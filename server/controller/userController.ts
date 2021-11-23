@@ -69,3 +69,22 @@ export const getUser = (req, res: express.Response, next) => {
     next(error);
   }
 };
+
+export const updateUser = async (req, res: express.Response, next) => {
+  const { id } = req.userInfo;
+  try {
+    const user = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (user) {
+      res.json(user);
+    } else {
+      const error = new ErrorCode("User not found");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
