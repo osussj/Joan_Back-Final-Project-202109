@@ -19,3 +19,6 @@ jobs:
 
       - name: Supertest
         run: npm run supertest
+        env:
+          MONGODB_STRING_TEST: ${{secrets.MONGODB_STRING_TEST}};
+          SERVER_PORT_TEST: ${{secrets.SERVER_PORT_TEST}}
