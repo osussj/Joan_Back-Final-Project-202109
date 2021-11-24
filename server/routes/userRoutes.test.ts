@@ -17,11 +17,9 @@ const request = supertest(app);
 let server;
 
 beforeAll(async () => {
-  await initializeMongo(
-    "mongodb+srv://osu:admin@cluster0.vzmpu.mongodb.net/escroomtest"
-  );
+  await initializeMongo(process.env.MONGODB_STRING_TEST);
   await User.deleteMany({});
-  server = await initializeServer(4001);
+  server = await initializeServer(process.env.SERVER_PORT_TEST);
 });
 
 afterAll((done) => {
