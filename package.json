@@ -6,7 +6,8 @@
   "scripts": {
     "start-dev": "ts-node-dev ./index.ts",
     "start-lo": "tsc && node dist/index.js",
-    "test": "jest",
+    "supertest": "jest",
+    "test": "jest --testPathIgnorePatterns /dist /server/routes/",
     "test-cov": "jest --watchAll --collect-coverage",
     "prepare": "husky install",
     "start": "node dist/index.js",
@@ -14,8 +15,7 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "dist",
-      "routes"
+      "dist"
     ]
   },
   "repository": {
