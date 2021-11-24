@@ -1,16 +1,11 @@
 import chalk from "chalk";
-
 import cors from "cors";
-
 import express from "express";
-
 import morgan from "morgan";
-
 import Debug from "debug";
-
 import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
-
 import userRoutes from "./routes/userRoutes";
+import roomRoutes from "./routes/roomRoutes";
 
 const debug = Debug("escroom:server");
 
@@ -42,5 +37,6 @@ export const initializeServer = (port) =>
   });
 
 app.use("/api/user", userRoutes);
+app.use("/api/room", roomRoutes);
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
