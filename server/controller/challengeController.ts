@@ -23,5 +23,4 @@ const createQuestion = async (
     next(error);
   }
 };
-
 export default createQuestion;

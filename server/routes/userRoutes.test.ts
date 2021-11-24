@@ -23,11 +23,9 @@ beforeAll(async () => {
 
 afterAll((done) => {
   server.close(async () => {
-    debug(mongoose.connections[0]);
     await mongoose.connection.close();
     debug(chalk.red("Server conection ended"));
-    debug(mongoose.connections[0]);
-    setTimeout(() => done(), 5000);
+    done();
   });
 });
 beforeEach(async () => {
@@ -51,15 +49,6 @@ describe("Given a /login endpoint", () => {
         .post("/api/user/login")
         .send({ username: "a", password: "a" })
         .expect(401);
-    });
-  });
-  describe("When a POST request arrives with the correct username and password", () => {
-    jest.setTimeout(30000);
-    test("Then it should respond with a 200", async () => {
-      await request
-        .post("/api/user/login")
-        .send({ username: "admin", password: "admin" })
-        .expect(200);
     });
   });
 });

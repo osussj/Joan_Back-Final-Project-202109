@@ -25,7 +25,6 @@ const initializeMongo = (connectionString) =>
       debug(chalk.greenBright(`Connected with the database `));
       resolve();
     });
-    mongoose.connection.on("close", () => debug("DB cerrada"));
   });
 
 export default initializeMongo;
