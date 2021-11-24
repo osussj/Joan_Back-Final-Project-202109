@@ -27,7 +27,7 @@ beforeAll(async () => {
     password: await bcrypt.hash("guest", 10),
     email: "guest@admin.com",
     avatar: "guest.jpg",
-    id: "1",
+    _id: "619cd1c5c5e491432a86e463",
   });
   const loginResponse = await request
     .post("/api/user/login")
@@ -38,6 +38,7 @@ beforeAll(async () => {
 
 afterAll((done) => {
   server.close(async () => {
+    await User.deleteMany({});
     await mongoose.connection.close();
     debug(chalk.red("Server conection ended"));
     done();
@@ -53,9 +54,7 @@ beforeEach(async () => {
   });
 });
 
-afterEach(async () => {
-  await User.deleteMany({});
-});
+afterEach(async () => {});
 
 describe("Given a /login endpoint", () => {
   describe("When a POST request arrives with a bad username and password", () => {
@@ -112,6 +111,35 @@ describe("Given a /profile endpoint", () => {
     test("Then it should respond with a 401 error", async () => {
       await request
         .get("/api/user/profile")
+        .set("Authorization", `Bearer a`)
+        .expect(401);
+    });
+  });
+});
+describe("Given a /update endpoint", () => {
+  describe("When a PUT request arrives with the user authorized", () => {
+    test("Then it should respond with a 200", async () => {
+      await request
+        .put("/api/user/profile/update")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          username: "guest12",
+          name: "guest12",
+          email: "guest@admin.com",
+          avatar: "guest.jpg",
+        })
+        .expect(200);
+    });
+  });
+  describe("When a PUT request arrives without being authorized", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request.put("/api/user/profile/update").expect(401);
+    });
+  });
+  describe("When a GET request arrives with an invalid token", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request
+        .put("/api/user/profile/update")
         .set("Authorization", `Bearer a`)
         .expect(401);
     });
