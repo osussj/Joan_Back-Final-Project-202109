@@ -14,7 +14,8 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "dist"
+      "dist",
+      "routes"
     ]
   },
   "repository": {
