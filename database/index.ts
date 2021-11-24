@@ -22,10 +22,10 @@ const initializeMongo = (connectionString) =>
         reject();
         return;
       }
-      console.log(chalk.greenBright(`Connected with the database `));
+      debug(chalk.greenBright(`Connected with the database `));
       resolve();
     });
-    mongoose.connection.on("close", () => console.log("DB cerrada"));
+    mongoose.connection.on("close", () => debug("DB cerrada"));
   });
 
 export default initializeMongo;

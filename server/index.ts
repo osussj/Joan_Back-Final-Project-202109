@@ -19,7 +19,7 @@ app.use(express.json());
 export const initializeServer = (port) =>
   new Promise((resolve, reject) => {
     const server = app.listen(port, () => {
-      console.log(chalk.yellowBright(`Server is listening on port: ${port}`));
+      debug(chalk.yellowBright(`Server is listening on port: ${port}`));
       resolve(server);
     });
 
@@ -32,7 +32,7 @@ export const initializeServer = (port) =>
     });
 
     server.on("close", () => {
-      console.log(chalk.yellowBright("Server disconnected"));
+      debug(chalk.yellowBright("Server disconnected"));
     });
   });
 

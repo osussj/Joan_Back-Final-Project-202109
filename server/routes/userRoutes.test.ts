@@ -23,10 +23,10 @@ beforeAll(async () => {
 
 afterAll((done) => {
   server.close(async () => {
-    console.log(mongoose.connections[0]);
+    debug(mongoose.connections[0]);
     await mongoose.connection.close();
     debug(chalk.red("Server conection ended"));
-    console.log(mongoose.connections[0]);
+    debug(mongoose.connections[0]);
     setTimeout(() => done(), 5000);
   });
 });
