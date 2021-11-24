@@ -16,3 +16,6 @@ jobs:
 
       - name: Testing
         run: npm test
+
+      - name: Supertest
+        run: npm run supertest
