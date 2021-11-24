@@ -9,14 +9,14 @@ import roomRoutes from "./routes/roomRoutes";
 
 const debug = Debug("escroom:server");
 
-const app = express();
+export const app = express();
 app.disable("x-powered-by");
 
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
-const initializeServer = (port) =>
+export const initializeServer = (port) =>
   new Promise((resolve, reject) => {
     const server = app.listen(port, () => {
       debug(chalk.yellowBright(`Server is listening on port: ${port}`));
@@ -40,5 +40,3 @@ app.use("/api/user", userRoutes);
 app.use("/api/room", roomRoutes);
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
-
-export default initializeServer;
