@@ -23,12 +23,13 @@ beforeAll(async () => {
 
 afterAll((done) => {
   server.close(async () => {
+    console.log(mongoose.connections[0]);
     await mongoose.connection.close();
     debug(chalk.red("Server conection ended"));
-    done();
+    console.log(mongoose.connections[0]);
+    setTimeout(() => done(), 5000);
   });
 });
-
 beforeEach(async () => {
   await User.create({
     name: "admin",
