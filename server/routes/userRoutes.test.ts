@@ -14,11 +14,26 @@ import User from "../../database/models/user";
 const debug = Debug("escroom:testing:endpoints");
 
 const request = supertest(app);
+jest.setTimeout(20000);
 let server;
+let token;
 beforeAll(async () => {
   await initializeMongo(process.env.MONGODB_STRING_TEST);
   await User.deleteMany({});
   server = await initializeServer(process.env.SERVER_PORT_TEST);
+  await User.create({
+    name: "guest",
+    username: "guest",
+    password: await bcrypt.hash("guest", 10),
+    email: "guest@admin.com",
+    avatar: "guest.jpg",
+    id: "1",
+  });
+  const loginResponse = await request
+    .post("/api/user/login")
+    .send({ username: "guest", password: "guest" })
+    .expect(200);
+  token = loginResponse.body.token;
 });
 
 afterAll((done) => {
@@ -68,6 +83,37 @@ describe("Given a /register endpoint", () => {
         avatar: "manolo.jpg",
       };
       await request.post("/api/user/register").send(user).expect(200);
+    });
+  });
+});
+describe("Given a /profile endpoint", () => {
+  describe("When a GET request arrives without being authorized", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request.get("/api/user/profile").expect(401);
+    });
+  });
+  describe("When a GET request arrives with the user authorized", () => {
+    test("Then it should respond with a 200", async () => {
+      const expectedUserInfo = {
+        avatar: "guest.jpg",
+        email: "guest@admin.com",
+        name: "guest",
+        username: "guest",
+      };
+      const { body } = await request
+        .get("/api/user/profile")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      expect(body).toMatchObject(expectedUserInfo);
+    });
+  });
+  describe("When a GET request arrives with an invalid token", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request
+        .get("/api/user/profile")
+        .set("Authorization", `Bearer a`)
+        .expect(401);
     });
   });
 });
