@@ -6,6 +6,7 @@ import chalk from "chalk";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import supertest from "supertest";
+
 import { initializeServer, app } from "..";
 import initializeMongo from "../../database";
 import User from "../../database/models/user";
@@ -13,9 +14,7 @@ import User from "../../database/models/user";
 const debug = Debug("escroom:testing:endpoints");
 
 const request = supertest(app);
-
 let server;
-
 beforeAll(async () => {
   await initializeMongo(process.env.MONGODB_STRING_TEST);
   await User.deleteMany({});
@@ -29,7 +28,6 @@ afterAll((done) => {
     done();
   });
 });
-
 beforeEach(async () => {
   await User.create({
     name: "admin",
@@ -51,14 +49,6 @@ describe("Given a /login endpoint", () => {
         .post("/api/user/login")
         .send({ username: "a", password: "a" })
         .expect(401);
-    });
-  });
-  describe("When a POST request arrives with the correct username and password", () => {
-    test("Then it should respond with a 200", async () => {
-      await request
-        .post("/api/user/login")
-        .send({ username: "admin", password: "admin" })
-        .expect(200);
     });
   });
 });
