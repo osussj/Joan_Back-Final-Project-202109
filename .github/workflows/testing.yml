@@ -22,3 +22,4 @@ jobs:
         env:
           MONGODB_STRING_TEST: ${{secrets.MONGODB_STRING_TEST}};
           SERVER_PORT_TEST: ${{secrets.SERVER_PORT_TEST}}
+          SECRET_HASH: ${{secrets.SECRET_HASH}}
