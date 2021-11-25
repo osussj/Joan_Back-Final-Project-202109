@@ -7,6 +7,7 @@ import {
   deleteQuestion,
   getChallenge,
   getQuestion,
+  getRoom,
   updateQuestion,
 } from "./challengeController";
 
@@ -272,6 +273,62 @@ describe("Given a getChallenge function", () => {
         populate: jest.fn().mockRejectedValue(null),
       });
       await getChallenge(null, null, next);
+
+      expect(next).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a getRoom function", () => {
+  describe("When it receives an array of challenges", () => {
+    test("Then it should invoke the method json with the challenges", async () => {
+      const fakeChallenges = [
+        {
+          id: "6185c1af9f1964f08e62d131",
+          name: "Test",
+          questions: [{}],
+        },
+        {
+          id: "6185c1af9f1964f08e62d431",
+          name: "Test1",
+          questions: [{}],
+        },
+      ];
+      const req = {
+        body: fakeChallenges,
+      } as Request;
+      const res = mockResponse();
+
+      Challenge.find = jest.fn().mockResolvedValue(fakeChallenges);
+      await getRoom(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(fakeChallenges);
+    });
+  });
+  describe("When it receives a non existent challenge", () => {
+    test("Then it should invoke a next function with a 404 error", async () => {
+      Challenge.find = jest.fn().mockResolvedValue(null);
+      const next = jest.fn();
+      const expectedError = new ErrorCode("No challenge found");
+      expectedError.code = 404;
+
+      await getRoom(null, null, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty(
+        "message",
+        expectedError.message
+      );
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+    });
+  });
+  describe("When the promise is rejected", () => {
+    test("Then it should invoke next function", async () => {
+      const next = jest.fn();
+
+      Challenge.find = jest.fn().mockReturnValue({
+        populate: jest.fn().mockRejectedValue(null),
+      });
+      await getRoom(null, null, next);
 
       expect(next).toHaveBeenCalled();
     });
