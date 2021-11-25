@@ -6,9 +6,9 @@
   "scripts": {
     "start-dev": "ts-node-dev ./index.ts",
     "start-lo": "tsc && node dist/index.js",
-    "supertest": "jest --testPathPattern /server/routes",
+    "supertest": "jest --testPathPattern --runInBand /server/routes/",
     "test": "jest --testPathIgnorePatterns /dist /server/routes/",
-    "test-cov": "jest --watchAll --collect-coverage",
+    "test-cov": "jest --watchAll --runInBand --collect-coverage",
     "prepare": "husky install",
     "eslint": "eslint --ignore-path .gitignore .",
     "start": "node dist/index.js",

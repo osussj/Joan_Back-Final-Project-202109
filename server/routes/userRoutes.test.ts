@@ -54,8 +54,6 @@ beforeEach(async () => {
   });
 });
 
-afterEach(async () => {});
-
 describe("Given a /login endpoint", () => {
   describe("When a POST request arrives with a bad username and password", () => {
     test("Then it should respond with a 401 error", async () => {
@@ -123,8 +121,8 @@ describe("Given a /update endpoint", () => {
         .put("/api/user/profile/update")
         .set("Authorization", `Bearer ${token}`)
         .send({
-          username: "guest12",
-          name: "guest12",
+          username: "guest13",
+          name: "guest13",
           email: "guest@admin.com",
           avatar: "guest.jpg",
         })
@@ -136,7 +134,7 @@ describe("Given a /update endpoint", () => {
       await request.put("/api/user/profile/update").expect(401);
     });
   });
-  describe("When a GET request arrives with an invalid token", () => {
+  describe("When a PUT request arrives with an invalid token", () => {
     test("Then it should respond with a 401 error", async () => {
       await request
         .put("/api/user/profile/update")
