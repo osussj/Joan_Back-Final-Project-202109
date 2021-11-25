@@ -35,13 +35,12 @@ export const updateQuestion = async (
       new: true,
       runValidators: true,
     });
-    if (question) {
-      res.json(question);
-    } else {
+    if (!question) {
       const error = new ErrorCode("Bad question provided");
       error.code = 400;
-      next(error);
+      return next(error);
     }
+    res.json(question);
   } catch (error) {
     next(error);
   }
