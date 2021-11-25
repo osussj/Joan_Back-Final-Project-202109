@@ -63,3 +63,22 @@ export const getQuestion = async (
     next(error);
   }
 };
+
+export const deleteQuestion = async (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
+  const { id } = req.body;
+  try {
+    const question = await Question.findByIdAndDelete(id);
+    if (!question) {
+      const error = new ErrorCode("No question found");
+      error.code = 404;
+      return next(error);
+    }
+    res.json(question);
+  } catch (error) {
+    next(error);
+  }
+};
