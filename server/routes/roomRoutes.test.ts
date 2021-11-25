@@ -11,6 +11,7 @@ import { initializeServer, app } from "..";
 import initializeMongo from "../../database";
 import User from "../../database/models/user";
 import Question from "../../database/models/question";
+import Challenge from "../../database/models/challenge";
 
 const debug = Debug("escroom:testing:endpoints");
 
@@ -34,6 +35,13 @@ const fakeQuestions = [
     hint: "There is no hint",
   },
 ];
+const fakeChallenge = [
+  {
+    name: "Node",
+    questions: [],
+    _id: "619f898acd6286b7a6818867",
+  },
+];
 const fakeQuestionsWithId = fakeQuestions.map((fakeQuestion) => {
   const fakeQuestionWithId = {
     ...fakeQuestion,
@@ -45,6 +53,18 @@ const fakeQuestionsWithId = fakeQuestions.map((fakeQuestion) => {
 
   return fakeQuestionWithId;
 });
+const fakeChallengesWithId = fakeChallenge.map((fakechallenge) => {
+  const fakeChallengeWithId = {
+    ...fakechallenge,
+    // eslint-disable-next-line no-underscore-dangle
+    id: fakechallenge._id,
+  };
+  // eslint-disable-next-line no-underscore-dangle
+  delete fakeChallengeWithId._id;
+
+  return fakeChallengeWithId;
+});
+
 let token;
 
 beforeAll(async () => {
@@ -78,10 +98,12 @@ afterAll((done) => {
 beforeEach(async () => {
   await Question.create(fakeQuestions[0]);
   await Question.create(fakeQuestions[1]);
+  await Challenge.create(fakeChallenge);
 });
 
 afterEach(async () => {
   await Question.deleteMany({});
+  await Challenge.deleteMany({});
 });
 
 describe("Given a /node/question endpoint", () => {
@@ -201,6 +223,35 @@ describe("Given a /node/question endpoint", () => {
     test("Then it should respond with a 401 error", async () => {
       await request
         .put("/api/room/node/question")
+        .set("Authorization", `Bearer aa`)
+        .expect(401);
+    });
+  });
+});
+
+describe("Given a /node endpoint", () => {
+  describe("When a GET request arrives with the bad request", () => {
+    test("Then it should respond with a 404 error", async () => {
+      await request
+        .get("/api/room/nodejs")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
+    });
+  });
+  describe("When a GET request arrives with the token and the right parameters", () => {
+    test("Then it should respond with the challenge", async () => {
+      const { body } = await request
+        .get("/api/room/node")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      expect(body).toEqual(fakeChallengesWithId);
+    });
+  });
+  describe("When a GET request arrives with the bad token", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request
+        .get("/api/room/node")
         .set("Authorization", `Bearer aa`)
         .expect(401);
     });
