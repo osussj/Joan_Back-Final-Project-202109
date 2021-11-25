@@ -134,12 +134,12 @@ describe("Given a /update endpoint", () => {
       await request.put("/api/user/profile/update").expect(401);
     });
   });
-  describe("When a PUT request arrives with an invalid token", () => {
+  describe("When a PUT request arrives with an invalid request", () => {
     test("Then it should respond with a 401 error", async () => {
       await request
-        .put("/api/user/profile/update")
-        .set("Authorization", `Bearer a`)
-        .expect(401);
+        .put("/api/user/profile/updates")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
     });
   });
 });
