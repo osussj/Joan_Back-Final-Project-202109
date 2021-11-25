@@ -174,4 +174,35 @@ describe("Given a /node/question endpoint", () => {
         .expect(401);
     });
   });
+  describe("When a DELETE request arrives with the bad request", () => {
+    test("Then it should respond with a 404 error", async () => {
+      await request
+        .delete("/api/room/node/questions")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
+    });
+  });
+  describe("When a DELETE request arrives with the token and the righ parameters", () => {
+    test("Then it should respond with the question deleted", async () => {
+      const deletedQuestion = {
+        id: "619e0282bd1c3ca34c68a905",
+        question: "What is the guest password",
+      };
+      const { body } = await request
+        .delete("/api/room/node/question")
+        .set("Authorization", `Bearer ${token}`)
+        .send(deletedQuestion)
+        .expect(200);
+
+      expect(body).toMatchObject(deletedQuestion);
+    });
+  });
+  describe("When a DELETE request arrives without the token", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request
+        .put("/api/room/node/question")
+        .set("Authorization", `Bearer aa`)
+        .expect(401);
+    });
+  });
 });
