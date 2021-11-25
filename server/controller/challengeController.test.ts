@@ -1,9 +1,11 @@
 import { Request } from "express";
+import Challenge from "../../database/models/challenge";
 import Question from "../../database/models/question";
 import { mockResponse } from "../../utils/mocks/mockFunction";
 import {
   createQuestion,
   deleteQuestion,
+  getChallenge,
   getQuestion,
   updateQuestion,
 } from "./challengeController";
@@ -16,6 +18,7 @@ class ErrorCode extends Error {
 describe("Given a createQuestion function", () => {
   describe("When it receives a request with the question information", () => {
     test("Then it should invoke the method json with the corresponding information", async () => {
+      const challengeId = "12";
       const question = {
         question: "What is this test",
         answer: "I don't know",
@@ -26,6 +29,7 @@ describe("Given a createQuestion function", () => {
       } as Request;
       const res = mockResponse();
       Question.create = jest.fn().mockResolvedValue(question);
+      Challenge.findByIdAndUpdate = jest.fn().mockResolvedValue(challengeId);
 
       await createQuestion(req, res, null);
 
@@ -215,6 +219,59 @@ describe("Given a deleteQuestion function", () => {
 
       Question.findByIdAndDelete = jest.fn().mockRejectedValue(null);
       await deleteQuestion(req, null, next);
+
+      expect(next).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a getChallenge function", () => {
+  describe("When it receives a challenge", () => {
+    test("Then it should invoke the method json with the challenges", async () => {
+      const fakeChallenges = {
+        id: "6185c1af9f1964f08e62d131",
+        name: "Test",
+        questions: [{}],
+      };
+      const req = {
+        body: fakeChallenges,
+      } as Request;
+      const res = mockResponse();
+
+      Challenge.find = jest.fn().mockReturnValue({
+        populate: jest.fn().mockResolvedValue(fakeChallenges),
+      });
+      await getChallenge(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(fakeChallenges);
+    });
+  });
+  describe("When it receives a non existent challenge", () => {
+    test("Then it should invoke a next function with a 404 error", async () => {
+      Challenge.find = jest.fn().mockReturnValue({
+        populate: jest.fn().mockResolvedValue(null),
+      });
+      const next = jest.fn();
+      const expectedError = new ErrorCode("No challenge found");
+      expectedError.code = 404;
+
+      await getChallenge(null, null, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty(
+        "message",
+        expectedError.message
+      );
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+    });
+  });
+  describe("When the promise is rejected", () => {
+    test("Then it should invoke next function", async () => {
+      const next = jest.fn();
+
+      Challenge.find = jest.fn().mockReturnValue({
+        populate: jest.fn().mockRejectedValue(null),
+      });
+      await getChallenge(null, null, next);
 
       expect(next).toHaveBeenCalled();
     });
