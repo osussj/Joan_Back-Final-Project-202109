@@ -86,7 +86,7 @@ afterEach(async () => {
 
 describe("Given a /node/question endpoint", () => {
   describe("When a GET request arrives with the bad request", () => {
-    test("Then it it should respond with a 404 error", async () => {
+    test("Then it should respond with a 404 error", async () => {
       await request
         .get("/api/room/node/questions")
         .set("Authorization", `Bearer ${token}`)
@@ -94,7 +94,7 @@ describe("Given a /node/question endpoint", () => {
     });
   });
   describe("When a GET request arrives with the token and the right parameters", () => {
-    test("Then it it should respond with the questions", async () => {
+    test("Then it should respond with the questions", async () => {
       const { body } = await request
         .get("/api/room/node/question")
         .set("Authorization", `Bearer ${token}`)
@@ -104,9 +104,41 @@ describe("Given a /node/question endpoint", () => {
     });
   });
   describe("When a GET request arrives without the token", () => {
-    test("Then it it should respond with a 401 error", async () => {
+    test("Then it should respond with a 401 error", async () => {
       await request
         .get("/api/room/node/question")
+        .set("Authorization", `Bearer aa`)
+        .expect(401);
+    });
+  });
+  describe("When a POST request arrives with the bad request", () => {
+    test("Then it should respond with a 404 error", async () => {
+      await request
+        .post("/api/room/node/questions")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
+    });
+  });
+  describe("When a POST request arrives with the token and the right parameters", () => {
+    test("Then it should respond with the new question", async () => {
+      const newQuestion = {
+        question: "What is the cors password?",
+        answer: "badcors",
+        hint: "Ask charles",
+      };
+      const { body } = await request
+        .post("/api/room/node/question")
+        .set("Authorization", `Bearer ${token}`)
+        .send(newQuestion)
+        .expect(200);
+
+      expect(body).toMatchObject(newQuestion);
+    });
+  });
+  describe("When a POST request arrives without the token", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request
+        .post("/api/room/node/question")
         .set("Authorization", `Bearer aa`)
         .expect(401);
     });
