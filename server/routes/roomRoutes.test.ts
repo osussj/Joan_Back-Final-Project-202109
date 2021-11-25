@@ -143,4 +143,27 @@ describe("Given a /node/question endpoint", () => {
         .expect(401);
     });
   });
+  describe("When a PUT request arrives with the bad request", () => {
+    test("Then it should respond with a 404 error", async () => {
+      await request
+        .put("/api/room/node/questions")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
+    });
+  });
+  describe("When a PUT request arrives with the token and the right parameters", () => {
+    test("Then it should respond the question updated", async () => {
+      const updatedQuestion = {
+        id: "619e0282bd1c3ca34c68a905",
+        question: "What is the test password?",
+      };
+      const { body } = await request
+        .put("/api/room/node/question")
+        .set("Authorization", `Bearer ${token}`)
+        .send(updatedQuestion)
+        .expect(200);
+
+      expect(body).toMatchObject(updatedQuestion);
+    });
+  });
 });
