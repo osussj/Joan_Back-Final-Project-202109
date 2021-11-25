@@ -55,7 +55,7 @@ describe("Given a createQuestion function", () => {
 
 describe("Given a getQuestion function", () => {
   describe("When it receives an array of questions", () => {
-    test("Then it should invoke the method json with the platforms", async () => {
+    test("Then it should invoke the method json with the questions", async () => {
       const questions = [
         {
           question: "What is the mark password",

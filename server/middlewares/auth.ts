@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
+import { RequestAuth } from "../../utils/mocks/mockFunction";
 
 class ErrorCode extends Error {
   code: number | undefined;
 }
-const auth = (req, res, next) => {
+const auth = (req: RequestAuth, res, next) => {
   const authHeader = req.header("Authorization");
   if (!authHeader) {
     const error = new ErrorCode("Authorization error");
