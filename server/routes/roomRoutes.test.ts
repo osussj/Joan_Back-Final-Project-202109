@@ -166,4 +166,12 @@ describe("Given a /node/question endpoint", () => {
       expect(body).toMatchObject(updatedQuestion);
     });
   });
+  describe("When a PUT request arrives without the token", () => {
+    test("Then it should respond with a 401 error", async () => {
+      await request
+        .put("/api/room/node/question")
+        .set("Authorization", `Bearer aa`)
+        .expect(401);
+    });
+  });
 });
