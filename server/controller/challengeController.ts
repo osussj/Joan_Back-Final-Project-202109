@@ -106,3 +106,21 @@ export const getChallenge = async (
     next(error);
   }
 };
+
+export const getRoom = async (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
+  try {
+    const challenge = await Challenge.find();
+    if (!challenge) {
+      const error = new ErrorCode("No challenge found");
+      error.code = 404;
+      return next(error);
+    }
+    res.json(challenge);
+  } catch (error) {
+    next(error);
+  }
+};

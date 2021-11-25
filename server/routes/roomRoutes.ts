@@ -5,6 +5,7 @@ import {
   getQuestion,
   deleteQuestion,
   getChallenge,
+  getRoom,
 } from "../controller/challengeController";
 import auth from "../middlewares/auth";
 
@@ -16,5 +17,6 @@ router.put("/node/question", auth, updateQuestion);
 router.delete("/node/question", auth, deleteQuestion);
 
 router.get("/node", auth, getChallenge);
+router.get("/", auth, getRoom);
 
 export default router;
