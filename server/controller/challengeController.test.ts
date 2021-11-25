@@ -3,6 +3,7 @@ import Question from "../../database/models/question";
 import { mockResponse } from "../../utils/mocks/mockFunction";
 import {
   createQuestion,
+  deleteQuestion,
   getQuestion,
   updateQuestion,
 } from "./challengeController";
@@ -108,7 +109,7 @@ describe("Given a getQuestion function", () => {
   });
 });
 
-describe("Given a updateQuestion function", () => {
+describe("Given an updateQuestion function", () => {
   describe("When it receives a question", () => {
     test("Then it should invoke the method json with the updatedQuestion", async () => {
       const updatedQuestion = {
@@ -158,6 +159,62 @@ describe("Given a updateQuestion function", () => {
 
       Question.findByIdAndUpdate = jest.fn().mockRejectedValue(null);
       await updateQuestion(req, null, next);
+
+      expect(next).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a deleteQuestion function", () => {
+  describe("When it receives a question", () => {
+    test("Then it should invoke the method json with the deleted question", async () => {
+      const deletedQuestion = {
+        id: "6185c1af9f1964f08e62d131",
+        question: "What a test",
+        answer: "Yes",
+        hint: "Rtfm",
+      };
+      const req = {
+        body: deletedQuestion,
+      } as Request;
+      const res = mockResponse();
+
+      Question.findByIdAndDelete = jest.fn().mockResolvedValue(deletedQuestion);
+      await deleteQuestion(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(deletedQuestion);
+    });
+  });
+  describe("When it receives a non existent question", () => {
+    test("Then it should invoke a next function with a 404 error", async () => {
+      Question.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+      const req = {
+        body: {
+          id: "6222d83be45c3a8801f1440d",
+        },
+      } as Request;
+      const next = jest.fn();
+      const expectedError = new ErrorCode("No question found");
+      expectedError.code = 404;
+
+      await deleteQuestion(req, null, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty(
+        "message",
+        expectedError.message
+      );
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+    });
+  });
+  describe("When the promise is rejected", () => {
+    test("Then it should invoke next function", async () => {
+      const req = {
+        body: {},
+      } as Request;
+      const next = jest.fn();
+
+      Question.findByIdAndDelete = jest.fn().mockRejectedValue(null);
+      await deleteQuestion(req, null, next);
 
       expect(next).toHaveBeenCalled();
     });
