@@ -14,7 +14,7 @@ const initializeMongo = (connectionString) =>
         delete ret.__v;
       },
     });
-    mongoose.set("debug", true);
+    mongoose.set("debug", false);
     mongoose.connect(connectionString, (error) => {
       if (error) {
         debug(chalk.redBright("Failed connection with the database"));
