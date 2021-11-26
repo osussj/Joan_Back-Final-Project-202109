@@ -17,8 +17,6 @@ const debug = Debug("escroom:testing:endpoints");
 
 const request = supertest(app);
 
-jest.setTimeout(20000);
-
 let server;
 
 const fakeQuestions = [
