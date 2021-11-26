@@ -6,6 +6,7 @@ import Debug from "debug";
 import { notFoundErrorHandler, generalErrorHandler } from "./middlewares/error";
 import userRoutes from "./routes/userRoutes";
 import roomRoutes from "./routes/roomRoutes";
+import nodejsRoutes from "./routes/nodejsRoutes";
 
 const debug = Debug("escroom:server");
 
@@ -38,5 +39,6 @@ export const initializeServer = (port) =>
 
 app.use("/api/user", userRoutes);
 app.use("/api/room", roomRoutes);
+app.use("/api/nodejs", nodejsRoutes);
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
