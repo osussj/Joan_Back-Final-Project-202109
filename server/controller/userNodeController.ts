@@ -14,7 +14,7 @@ export const loginUserNode = async (
     error.code = 401;
     next(error);
   } else {
-    const userPassword = await Buffer.from(user.password, "base64");
+    const userPassword = Buffer.from(user.password, "base64");
     const userPasswordToString = userPassword.toString("utf-8");
     if (userPasswordToString !== password) {
       const error = new CustomError("Wrong credentials");
