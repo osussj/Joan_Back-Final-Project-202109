@@ -6,19 +6,20 @@ import User from "../../database/models/user";
 class ErrorCode extends Error {
   code: number | undefined;
 }
-export const createUser = async (
-  req: express.Request,
-  res: express.Response,
-  next
-) => {
-  const { name, username, password, email, avatar } = req.body;
+export const createUser = async (req, res: express.Response, next) => {
+  const { name, username, password, email } = req.body;
+  const { file } = req;
+  let image;
+  if (file) {
+    image = file.fileURL;
+  }
   try {
     const user = await User.create({
       name,
       username,
       password: await bcrypt.hash(password, 10),
       email,
-      avatar,
+      avatar: image,
     });
     res.json(user);
   } catch {

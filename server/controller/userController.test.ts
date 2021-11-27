@@ -25,7 +25,8 @@ describe("Given a createUser function", () => {
       };
       const req = {
         body: user,
-      } as Request;
+        file: user.avatar,
+      };
       const res = mockResponse();
       User.create = jest.fn().mockResolvedValue(user);
       await createUser(req, res, null);
@@ -35,6 +36,7 @@ describe("Given a createUser function", () => {
   });
   describe("When it receives a request with bad credentials of the user", () => {
     test("Then it should invoke the next function", async () => {
+      const avatar = "";
       const user = {};
       const error = {
         error: "Bad credentials provided",
@@ -42,7 +44,8 @@ describe("Given a createUser function", () => {
       };
       const req = {
         body: user,
-      } as Request;
+        file: avatar,
+      };
       const next = jest.fn();
       User.create = jest.fn().mockRejectedValue(user);
 
