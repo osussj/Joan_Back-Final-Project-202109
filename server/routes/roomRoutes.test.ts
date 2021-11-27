@@ -220,7 +220,7 @@ describe("Given a /node/question endpoint", () => {
   describe("When a DELETE request arrives without the token", () => {
     test("Then it should respond with a 401 error", async () => {
       await request
-        .put("/api/room/node/question")
+        .delete("/api/room/node/question")
         .set("Authorization", `Bearer aa`)
         .expect(401);
     });
