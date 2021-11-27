@@ -43,3 +43,21 @@ export const getUserNode = async (
     next(error);
   }
 };
+
+export const getAllUsers = async (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
+  try {
+    const allUsers = await Usernode.find();
+    if (!allUsers) {
+      const error = new CustomError("No users provided");
+      error.code = 404;
+      return next(error);
+    }
+    res.json(allUsers);
+  } catch (error) {
+    next(error);
+  }
+};
