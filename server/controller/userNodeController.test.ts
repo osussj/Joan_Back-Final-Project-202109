@@ -1,7 +1,7 @@
 import { Request } from "express";
 import Usernode from "../../database/models/usernode";
 import { mockResponse } from "../../utils/mocks/mockFunction";
-import { getUserNode, loginUserNode } from "./userNodeController";
+import { getAllUsers, getUserNode, loginUserNode } from "./userNodeController";
 
 jest.mock("../../database/models/usernode");
 jest.setTimeout(5000);
@@ -139,6 +139,59 @@ describe("Given a getUserNode function", () => {
       await getUserNode(req, null, next);
 
       expect(next).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a getAllUsers function", () => {
+  describe("When the promise is rejected", () => {
+    test("Then it should call next function", async () => {
+      const next = jest.fn();
+
+      Usernode.find = jest.fn().mockRejectedValue(null);
+      await getAllUsers(null, null, next);
+
+      expect(next).toHaveBeenCalled();
+    });
+  });
+  describe("When it receives an array of users", () => {
+    test("Then it should invoke method json with the users", async () => {
+      const fakeUsers = [
+        {
+          username: "guest",
+          password: "fakePassword",
+          id: "1",
+          is_admin: false,
+        },
+        {
+          username: "guest1",
+          password: "fakePassword1",
+          id: "2",
+          is_admin: false,
+        },
+      ];
+      const res = mockResponse();
+
+      Usernode.find = jest.fn().mockResolvedValue(fakeUsers);
+      await getAllUsers(null, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(fakeUsers);
+    });
+  });
+  describe("When it receives an empty array of users", () => {
+    test("Then it should invoke next function with 404 error", async () => {
+      const next = jest.fn();
+      const expectedError = new ErrorCode("No users provided");
+      expectedError.code = 404;
+
+      Usernode.find = jest.fn().mockResolvedValue(null);
+      await getAllUsers(null, null, next);
+
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+      expect(next.mock.calls[0][0]).toHaveProperty(
+        "message",
+        expectedError.message
+      );
     });
   });
 });
