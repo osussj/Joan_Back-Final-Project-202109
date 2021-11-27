@@ -61,3 +61,21 @@ export const getAllUsers = async (
     next(error);
   }
 };
+
+export const getLatestUsers = async (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
+  try {
+    const latestUsers = await Usernode.find().where("is_admin").equals(false);
+    if (!latestUsers) {
+      const error = new CustomError("No users provided");
+      error.code = 404;
+      return next(error);
+    }
+    res.json(latestUsers);
+  } catch (error) {
+    next(error);
+  }
+};
