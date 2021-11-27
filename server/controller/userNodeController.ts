@@ -2,7 +2,7 @@ import express from "express";
 import Usernode from "../../database/models/usernode";
 import CustomError from "../../utils/interfaces/error/customError";
 
-const loginUserNode = async (
+export const loginUserNode = async (
   req: express.Request,
   res: express.Response,
   next
@@ -25,4 +25,21 @@ const loginUserNode = async (
   }
 };
 
-export default loginUserNode;
+export const getUserNode = async (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
+  const { username } = req.body;
+  try {
+    const userProfile = await Usernode.findOne({ username });
+    if (!userProfile) {
+      const error = new CustomError("User not found");
+      error.code = 404;
+      return next(error);
+    }
+    res.json(userProfile);
+  } catch (error) {
+    next(error);
+  }
+};
