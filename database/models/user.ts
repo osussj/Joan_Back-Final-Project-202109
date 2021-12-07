@@ -5,7 +5,7 @@ interface IUser {
   username: string;
   password: string;
   email: string;
-  is_Admin?: boolean;
+  isAdmin?: boolean;
   avatar: string;
 }
 const userSchema: Schema<IUser> = new Schema({
@@ -25,7 +25,7 @@ const userSchema: Schema<IUser> = new Schema({
     type: String,
     required: true,
   },
-  is_Admin: {
+  isAdmin: {
     type: Boolean,
     default: false,
   },

@@ -86,7 +86,7 @@ describe("Given a getQuestion function", () => {
     test("Then it should invoke next with the error", async () => {
       const next = jest.fn();
 
-      Question.find = jest.fn().mockRejectedValue(null);
+      Question.find = jest.fn().mockRejectedValue("");
       await getQuestion(null, null, next);
 
       expect(next).toHaveBeenCalled();
@@ -162,7 +162,7 @@ describe("Given an updateQuestion function", () => {
       } as Request;
       const next = jest.fn();
 
-      Question.findByIdAndUpdate = jest.fn().mockRejectedValue(null);
+      Question.findByIdAndUpdate = jest.fn().mockRejectedValue("");
       await updateQuestion(req, null, next);
 
       expect(next).toHaveBeenCalled();
@@ -218,7 +218,7 @@ describe("Given a deleteQuestion function", () => {
       } as Request;
       const next = jest.fn();
 
-      Question.findByIdAndDelete = jest.fn().mockRejectedValue(null);
+      Question.findByIdAndDelete = jest.fn().mockRejectedValue("");
       await deleteQuestion(req, null, next);
 
       expect(next).toHaveBeenCalled();
@@ -270,7 +270,7 @@ describe("Given a getChallenge function", () => {
       const next = jest.fn();
 
       Challenge.find = jest.fn().mockReturnValue({
-        populate: jest.fn().mockRejectedValue(null),
+        populate: jest.fn().mockRejectedValue(""),
       });
       await getChallenge(null, null, next);
 
@@ -326,7 +326,7 @@ describe("Given a getRoom function", () => {
       const next = jest.fn();
 
       Challenge.find = jest.fn().mockReturnValue({
-        populate: jest.fn().mockRejectedValue(null),
+        populate: jest.fn().mockRejectedValue(""),
       });
       await getRoom(null, null, next);
 
