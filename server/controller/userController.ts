@@ -54,6 +54,7 @@ export const loginUser = async (
           id: user.id,
           email: user.email,
           avatar: user.avatar,
+          isAdmin: user.isAdmin,
         },
         process.env.SECRET_HASH
       );
