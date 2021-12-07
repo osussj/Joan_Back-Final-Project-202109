@@ -18,11 +18,11 @@ const auth = (req: RequestAuth, res, next) => {
       next(error);
     } else {
       try {
-        const { id, username, name, email, avatar } = jwt.verify(
+        const { id, username, name, email, avatar, isAdmin } = jwt.verify(
           token,
           process.env.SECRET_HASH
         );
-        req.userInfo = { id, username, name, email, avatar };
+        req.userInfo = { id, username, name, email, avatar, isAdmin };
         next();
       } catch {
         const error = new ErrorCode("Verify error");

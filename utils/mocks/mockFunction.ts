@@ -18,6 +18,7 @@ interface UserInfo {
   name;
   email;
   avatar;
+  isAdmin;
 }
 export interface RequestAuth extends express.Request {
   userInfo?: UserInfo;

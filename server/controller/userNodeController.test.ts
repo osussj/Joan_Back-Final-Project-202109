@@ -206,7 +206,11 @@ describe("Given a getLatestUsers function", () => {
     test("Then it should call next function", async () => {
       const next = jest.fn();
 
-      Usernode.find = jest.fn().mockRejectedValue(null);
+      Usernode.find = jest.fn().mockImplementation(() => ({
+        where: jest.fn().mockImplementation(() => ({
+          equals: jest.fn().mockRejectedValue(null),
+        })),
+      }));
       await getLatestUsers(null, null, next);
 
       expect(next).toHaveBeenCalled();
